@@ -1,0 +1,99 @@
+<template>
+    <div class="SearchItems" :id="game.id">
+        <div v-if="game.cover" class="game-cover">
+            <img :src="'https://images.igdb.com/igdb/image/upload/t_cover_big/' + game.cover.image_id + '.jpg'" />
+        </div>
+        <div v-else class="game-cover">
+            <img src="../assets/images/boxart-not-found.jpg" />
+        </div>
+        <div>
+            <h3 class="search-results-header">{{ game.name }}</h3>
+            <div class="results-details-layout">
+                <div v-if="game.human_date"><strong>Release Date:</strong><br>{{ game.human_date }}</div>
+                <div v-else><strong>Release Date:</strong><br>N/A</div>
+
+                <div v-if="game.aggregated_rating"><strong>Rating:</strong><br>{{ Math.round(game.aggregated_rating) }}</div>
+                <div v-else><strong>Rating:</strong><br> N/A</div>
+
+                <div v-if="!game.genres"><strong>Genre:</strong><br>N/A</div>
+                <div v-else-if="game.genres.length >= 2"><strong>Genre:</strong><br>{{ game.genres[0].name }},<br> {{ game.genres[1].name }}</div>
+                <div v-else-if="game.genres.length == 1"><strong>Genre:</strong><br>{{ game.genres[0].name }}</div>
+                <div v-else><strong>Genre:</strong><br>N/A</div>
+
+                <div v-if="!game.platforms"><strong>Platform:</strong><br>N/A</div>
+                <div v-else-if="game.platforms.length == 0"><strong>Platform:</strong><br>N/A</div>
+                <div v-else-if="game.platforms.length > 2"><strong>Platform:</strong><br>Multi-platform</div>
+                <div v-else-if="game.platforms.length == 2"><strong>Platform:</strong><br>{{ game.platforms[0].name }},<br>{{ game.platforms[1].name }}</div>
+                <div v-else><strong>Platform:</strong><br>{{ game.platforms[0].name }}</div>
+            </div>
+            <div class="btn">
+                <a :href="game.url" target="_blank">View Details</a>
+            </div>
+        </div>
+    </div> 
+</template>
+
+<script>
+export default {
+    name: 'SearchResults',
+    props: ["game"]
+}
+</script>
+
+<style scoped>
+    .SearchItems {
+        padding: 40px;
+        margin: 20px 0;
+        background: #fff;
+        display: grid;
+        /* grid-template-columns: 1fr; */
+        grid-column-gap: 10px;
+    }
+    .game-cover {
+        justify-self: center;
+    }
+    .game-cover img {
+        border: 1px solid #484848;
+        max-width: 200px;
+        margin-bottom: 10px;
+    }
+    @media (min-width: 768px) {
+        .SearchItems {
+            grid-template-columns: 30% 70%;
+        }
+        .game-cover img {
+            margin-bottom: 0;
+        }
+    }
+    .search-results-header {
+        font: bold 90% "Lora", serif;
+        color: #EE1B15;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+    .results-details-layout {
+        display: grid;
+        grid-template-columns: 50% 50%;
+        text-align: center;
+        font-size: 65%;
+    }
+    .results-details-layout div {
+        margin: 10px 0;
+    }
+    .btn {
+        text-align: center;
+        margin: 10px 0;
+    }
+    .btn a {
+        padding: 10px 20px;
+        color: #fff;
+        background: #181818;
+        margin: 20px 0;
+        border: 0;
+        font-size: 65%;
+        font-weight: bold;
+    }
+    .btn a:hover {
+        background: #EE1B15;
+    }
+</style>
