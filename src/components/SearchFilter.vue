@@ -4,22 +4,26 @@
         <div id="SearchFilter">
             <div v-if="doesGenreExist">
                 <h3 class="genre-header">Genre</h3>
-                <div v-bind:key="index" v-for="(category,index) in genreNameResults">
-                    <label class="checkbox-label">
-                        <input class="genre" type="checkbox" :value="category">
-                        <span class="checkbox-custom"></span>
-                        {{ category }}
-                    </label>
+                <div class="genre-filter-section">
+                    <div v-bind:key="index" v-for="(category,index) in genreNameResults">
+                        <label class="checkbox-label">
+                            <input class="genre" type="checkbox" :value="category">
+                            <span class="checkbox-custom"></span>
+                            {{ category }}
+                        </label>
+                    </div>
                 </div>
             </div>
             <div v-if="doesPlatformExist">
-                <h3 class="genre-header">Platform</h3>
-                <div v-bind:key="index" v-for="(category,index) in platformNameResults">
-                    <label class="checkbox-label">
-                        <input class="platform" type="checkbox" :value="category">
-                        <span class="checkbox-custom"></span>
-                        {{ category }}
-                    </label>
+                <h3 class="genre-header">Platform <span class="filter-collapse"></span></h3>
+                <div class="platform-filter-section">
+                    <div v-bind:key="index" v-for="(category,index) in platformNameResults">
+                        <label class="checkbox-label">
+                            <input class="platform" type="checkbox" :value="category">
+                            <span class="checkbox-custom"></span>
+                            {{ category }}
+                        </label>
+                    </div>
                 </div>
             </div>
             <div class="search-buttons">

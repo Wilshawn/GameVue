@@ -72,7 +72,7 @@ export default {
 
       // grab api data from igdb
       axios({
-          url: proxyurl + url,
+          url: url,
           method: 'GET',
           headers: {
               'user-key': 'af6ee0bc782a3591fa8930754a4ecd31',
@@ -135,7 +135,7 @@ export default {
         });
 
         axios({
-            url: proxyurl + url,
+            url: url,
             method: 'GET',
             headers: {
                 'user-key': 'af6ee0bc782a3591fa8930754a4ecd31',
