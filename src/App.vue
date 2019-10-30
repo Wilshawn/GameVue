@@ -72,11 +72,11 @@ export default {
 
       // grab api data from igdb
       axios({
-          url: url,
+          url: proxyurl + url,
           method: 'GET',
           headers: {
               'user-key': 'af6ee0bc782a3591fa8930754a4ecd31',
-              'Access-Control-Allow-Origin': 'http://localhost:8080'
+              'Access-Control-Allow-Origin': '*'
           }
       })
       .then(res => {
@@ -135,11 +135,11 @@ export default {
         });
 
         axios({
-            url: url,
+            url: proxyurl + url,
             method: 'GET',
             headers: {
                 'user-key': 'af6ee0bc782a3591fa8930754a4ecd31',
-                'Access-Control-Allow-Origin': 'http://localhost:8080'
+                'Access-Control-Allow-Origin': '*'
             }
         })
         .then(res => {
