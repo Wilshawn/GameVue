@@ -76,12 +76,13 @@ export default {
           method: 'GET',
           headers: {
               'user-key': 'af6ee0bc782a3591fa8930754a4ecd31',
-              'Access-Control-Allow-Origin': '*'
+              'Access-Control-Allow-Origin': 'http://localhost:8080/'
           }
       })
       .then(res => {
         this.games = res.data;
-        addNewDate(this.games); 
+        addNewDate(this.games);
+        loadingGifToggle("off");
       })
       .catch(err => {
       });
@@ -147,11 +148,12 @@ export default {
             this.games = res.data;
             addNewDate(this.games); 
             this.searchText = '';
+            loadingGifToggle("off");
         })
         .catch(err => {
         });
       }
-      loadingGifToggle("off");
+      
     }
   },
   created() {

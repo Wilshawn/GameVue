@@ -12,8 +12,10 @@
                 <div v-if="game.human_date"><strong>Release Date:</strong><br>{{ game.human_date }}</div>
                 <div v-else><strong>Release Date:</strong><br>N/A</div>
 
-                <div v-if="game.aggregated_rating"><strong>Rating:</strong><br>{{ Math.round(game.aggregated_rating) }}</div>
-                <div v-else><strong>Rating:</strong><br> N/A</div>
+                <div v-if="game.aggregated_rating >= 75"><strong>Rating:</strong><br><span class="game-rating rating-high">{{ Math.round(game.aggregated_rating) }}</span></div>
+                <div v-else-if="game.aggregated_rating >= 50"><strong>Rating:</strong><br><span class="game-rating rating-mid">{{ Math.round(game.aggregated_rating) }}</span></div>
+                <div v-else-if="game.aggregated_rating >= 0"><strong>Rating:</strong><br><span class="game-rating rating-low">{{ Math.round(game.aggregated_rating) }}</span></div>
+                <div v-else><strong>Rating:</strong><br><span class="game-rating">N/A</span></div>
 
                 <div v-if="!game.genres"><strong>Genre:</strong><br>N/A</div>
                 <div v-else-if="game.genres.length >= 2"><strong>Genre:</strong><br>{{ game.genres[0].name }},<br> {{ game.genres[1].name }}</div>
@@ -95,5 +97,24 @@ export default {
     }
     .btn a:hover {
         background: #EE1B15;
+    }
+    .game-rating {
+        background: #efefef;
+        padding: 3px 7px;
+        font-weight: bold;
+        margin-top: 3px;
+        display: inline-block;
+    }
+    .rating-high {
+        background: #66CC33;
+        color: #fff;
+    }
+    .rating-mid {
+        background: #FFCC33;
+        color: #fff;
+    }
+    .rating-low {
+        background: #FF1D00;
+        color: #fff;
     }
 </style>
