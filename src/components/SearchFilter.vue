@@ -1,9 +1,9 @@
 <template>
     <section>
-        <h2 class="filter-header">Filter</h2>
+        <h2 class="filter-header">Filter <span @click="toggleFilter('all')" class="fa fa-sort-up"></span></h2>
         <div id="SearchFilter">
             <div v-if="doesGenreExist">
-                <h3 class="genre-header">Genre</h3>
+                <h3 class="genre-header">Genre <span @click="toggleFilter('genre')" class="fa fa-sort-up"></span></h3>
                 <div class="genre-filter-section">
                     <div v-bind:key="index" v-for="(category,index) in genreNameResults">
                         <label class="checkbox-label">
@@ -15,7 +15,7 @@
                 </div>
             </div>
             <div v-if="doesPlatformExist">
-                <h3 class="genre-header">Platform <span class="filter-collapse"></span></h3>
+                <h3 class="genre-header">Platform <span @click="toggleFilter('platform')" class="fa fa-sort-up"></span></h3>
                 <div class="platform-filter-section">
                     <div v-bind:key="index" v-for="(category,index) in platformNameResults">
                         <label class="checkbox-label">
@@ -221,12 +221,49 @@ export default {
 
             this.platformNameResults = platformNameResults;
             this.doesPlatformExist = doesPlatformExist;
+        },
+        // toggle filters
+        toggleFilter(filterName) {
+            if (filterName != 'all') {
+                var filter = document.getElementsByClassName(filterName + "-filter-section")[0];
+                var filterIcon = filter.previousElementSibling.firstElementChild;
+                if (filter) {
+                    if (filter.style.display === "none") {
+                        filter.style.display = "block";
+                        filterIcon.classList.add('fa-sort-up');
+                        filterIcon.classList.remove('fa-sort-down');
+                    } else {
+                        filter.style.display = "none";
+                        filterIcon.classList.add('fa-sort-down');
+                        filterIcon.classList.remove('fa-sort-up');
+                    }
+                }
+            } else if (filterName == 'all') {
+                var filter = document.getElementById('SearchFilter');
+                var filterIcon = filter.previousElementSibling.firstElementChild;
+                if (filter) {
+                    if (filter.style.display === "none") {
+                        filter.style.display = "block";
+                        filterIcon.classList.add('fa-sort-up');
+                        filterIcon.classList.remove('fa-sort-down');
+                    } else {
+                        filter.style.display = "none";
+                        filterIcon.classList.add('fa-sort-down');
+                        filterIcon.classList.remove('fa-sort-up');
+                    }
+                }
+            }
+            
+           
         }
     },
     watch: {
         games: function() {
             this.populateFilter();
             this.populatePlatform();
+            if (screen.width < 1200) {
+                this.toggleFilter('all');
+            }
         }
     }
 }
