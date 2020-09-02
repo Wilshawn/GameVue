@@ -26,6 +26,18 @@
                     </div>
                 </div>
             </div>
+            <div v-if="doesCompanyExist">
+                <h3 class="genre-header">Company <span @click="toggleFilter('company')" class="fa fa-sort-up"></span></h3>
+                <div class="company-filter-section">
+                    <div v-bind:key="index" v-for="(category,index) in companyNameResults">
+                        <label class="checkbox-label">
+                            <input class="company" type="checkbox" :value="category">
+                            <span class="checkbox-custom"></span>
+                            {{ category }}
+                        </label>
+                    </div>
+                </div>
+            </div>
             <div class="search-buttons">
                 <div>
                     <a @click="clearAll">Clear All</a>
@@ -51,8 +63,10 @@ export default {
         return {
             doesGenreExist: false,
             doesPlatformExist: false,
+            doesCompanyExist: false,
             genreNameResults: [],
-            platformNameResults: []
+            platformNameResults: [],
+            companyNameResults: [],
         }
     },
     methods: {
@@ -71,14 +85,21 @@ export default {
             };
 
             var applyFilter = function(type, value, gameList) {
+                var gameTypeKey = type;
                 gameList.forEach(function(game) {
                     if (game[type]) {
                         var gameType = game[type];
                         var passFilter = false;
 
                         gameType.forEach(function(type) {
-                            if (type.name == value) {
-                                passFilter = true;
+                            if (gameTypeKey == 'involved_companies') {
+                                if (type.company.name == value) {
+                                    passFilter = true;
+                                }
+                            } else {
+                                if (type.name == value) {
+                                    passFilter = true;
+                                }
                             }   
                         });
 
@@ -97,10 +118,12 @@ export default {
 
             var genreChecked = [];
             var platformChecked = [];
+            var companyChecked = [];
             var gameResults = Array.prototype.slice.call(document.querySelectorAll('.SearchItems'));
 
             genreChecked = Array.prototype.slice.call(document.querySelectorAll('input[type="checkbox"].genre:checked'));
             platformChecked = Array.prototype.slice.call(document.querySelectorAll('input[type="checkbox"].platform:checked'));
+            companyChecked = Array.prototype.slice.call(document.querySelectorAll('input[type="checkbox"].company:checked'));
             gameResults.forEach(function(game) {
                 game.style.display = "grid";
             });
@@ -112,6 +135,10 @@ export default {
 
             platformChecked.forEach(function(platform) {
                 applyFilter("platforms", platform.value, games);
+            });
+
+            companyChecked.forEach(function(company) {
+                applyFilter("involved_companies", company.value, games);
             });
 
             loadingGifToggle("off");
@@ -222,6 +249,44 @@ export default {
             this.platformNameResults = platformNameResults;
             this.doesPlatformExist = doesPlatformExist;
         },
+        populateCompany() {
+            // console.log("function runs");
+
+            var gameList = this.games;
+            var doesCompanyExist = this.doesCompanyExist;
+            var companyNameResults = [];
+            this.companyNameResults = [];
+
+        // run through each game
+            gameList.forEach(function(game) {
+                // genre exist on game set variable
+                if (game.hasOwnProperty("involved_companies")) {
+                    if (!doesCompanyExist) {
+                        doesCompanyExist = true;
+                    }
+                    var companyArray = game.involved_companies;
+                    // for each genre on particular game, check if genre is unique 
+                    // and not on list.
+                    // if its not, add it
+                    companyArray.forEach(function(involved_company) {
+                        var companyName = involved_company.company.name;
+                        if (companyNameResults.length > 0) {
+                            var isCompanyIncluded = companyNameResults.every(function(companyUniqueName) {
+                                return companyName != companyUniqueName;
+                            });
+                            if (isCompanyIncluded) {
+                                companyNameResults.push(companyName);
+                            }
+                        } else if (companyNameResults.length == 0) {
+                            companyNameResults.push(companyName);
+                        }
+                    });
+                }
+            });
+
+            this.companyNameResults = companyNameResults;
+            this.doesCompanyExist = doesCompanyExist;
+        },
         // toggle filters
         toggleFilter(filterName) {
             if (filterName != 'all') {
@@ -261,6 +326,7 @@ export default {
         games: function() {
             this.populateFilter();
             this.populatePlatform();
+            this.populateCompany();
             if (screen.width < 1200) {
                 this.toggleFilter('all');
             }

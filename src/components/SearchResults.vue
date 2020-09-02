@@ -33,4 +33,15 @@ export default {
     .no-results {
         text-align: center;
     }
+    .search-item-container {
+        padding: 40px;
+        margin: 20px 0;
+        background: #fff;
+    }
+    .search-results-header {
+        font: bold 90% "Lora", serif;
+        color: #EE1B15;
+        margin-bottom: 10px;
+        text-align: center;
+    }
 </style>

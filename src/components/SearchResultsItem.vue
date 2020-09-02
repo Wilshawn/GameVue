@@ -1,13 +1,14 @@
 <template>
     <div class="SearchItems" :id="game.id">
         <div v-if="game.cover" class="game-cover">
-            <img :src="'https://images.igdb.com/igdb/image/upload/t_cover_big/' + game.cover.image_id + '.jpg'" />
+            <img :src="'https://images.igdb.com/igdb/image/upload/t_1080p/' + game.cover.image_id + '.jpg'" />
         </div>
         <div v-else class="game-cover">
             <img src="../assets/images/boxart-not-found.jpg" />
         </div>
         <div>
-            <h3 class="search-results-header">{{ game.name }}</h3>
+            <h3 class="search-results-header">{{ game.name }}</h3>            
+            <div v-if="game.summary"><p cl>{{ game.summary }}</p></div>
             <div class="results-details-layout">
                 <div v-if="game.human_date"><strong>Release Date:</strong><br>{{ game.human_date }}</div>
                 <div v-else><strong>Release Date:</strong><br>N/A</div>
@@ -27,12 +28,17 @@
                 <div v-else-if="game.platforms.length > 2"><strong>Platform:</strong><br>Multi-platform</div>
                 <div v-else-if="game.platforms.length == 2"><strong>Platform:</strong><br>{{ game.platforms[0].name }},<br>{{ game.platforms[1].name }}</div>
                 <div v-else><strong>Platform:</strong><br>{{ game.platforms[0].name }}</div>
+
+                <div><strong>Developer:</strong><br>{{ game.developer }}</div>
+
+                <div><strong>Publisher:</strong><br>{{ game.publisher }}</div>
+                
             </div>
             <div class="btn">
                 <a :href="game.url" target="_blank">View Details</a>
             </div>
         </div>
-    </div> 
+    </div>
 </template>
 
 <script>
@@ -44,15 +50,21 @@ export default {
 
 <style scoped>
     .SearchItems {
-        padding: 40px;
-        margin: 20px 0;
-        background: #fff;
         display: grid;
         /* grid-template-columns: 1fr; */
         grid-column-gap: 10px;
     }
+    .search-item-container p {
+        font-size: 55%;
+    
+        overflow: auto;
+        max-height: 100px;
+        text-align: justify;
+        margin-bottom: 20px;
+    }
     .game-cover {
         justify-self: center;
+        align-self: center;
     }
     .game-cover img {
         border: 1px solid #484848;
@@ -75,9 +87,9 @@ export default {
     }
     .results-details-layout {
         display: grid;
-        grid-template-columns: 50% 50%;
+        grid-template-columns: 33.3% 33.3% 33.3%;
         text-align: center;
-        font-size: 65%;
+        font-size: 55%;
     }
     .results-details-layout div {
         margin: 10px 0;
@@ -92,7 +104,7 @@ export default {
         background: #181818;
         margin: 20px 0;
         border: 0;
-        font-size: 65%;
+        font-size: 55%;
         font-weight: bold;
     }
     .btn a:hover {

@@ -17,6 +17,7 @@
     <div id="loading-gif" style="display: none;">
         <img src="./assets/images/loading-results.gif" />
     </div>
+    <button @click="goToTop()" id="topButton" title="Go to Top">Top</button>
   </div>
 </template>
 
@@ -64,11 +65,31 @@ export default {
         });
       }
 
+       var addDeveloperAndPublisher = function(gameList) {
+        gameList.forEach(function(game) {
+          game["developer"] = 'N/A';
+          game["publisher"] = 'N/A';
+          var involvedCompanies = game.involved_companies;
+
+          if (involvedCompanies) {
+            involvedCompanies.forEach(function(involved_company) {
+              if (involved_company.publisher) {
+                game["publisher"] = involved_company.company.name;
+              }
+
+              if (involved_company.developer) {
+                game["developer"] = involved_company.company.name;
+              }
+            })
+          }
+        })
+      }
+
       var date = new Date();
       var greaterThanYear = date.getFullYear() - 1;
       var greaterThanYearTS = Date.parse('31 Dec ' + greaterThanYear + ' 16:59:59 GMT')/1000;
 
-      var url = "https://api-v3.igdb.com/games?fields=name,id,genres.name,first_release_date,platforms.name,aggregated_rating,url,cover.image_id,summary&filter[first_release_date][gt]=" + greaterThanYearTS + "&order=popularity:desc&limit=25";
+      var url = "https://api-v3.igdb.com/games?fields=name,id,genres.name,first_release_date,platforms.name,aggregated_rating,url,cover.image_id,summary,involved_companies.developer,involved_companies.publisher,involved_companies.company.name&filter[first_release_date][gt]=" + greaterThanYearTS + "&order=popularity:desc&limit=25";
 
       // grab api data from igdb
       axios({
@@ -82,6 +103,7 @@ export default {
       .then(res => {
         this.games = res.data;
         addNewDate(this.games);
+        addDeveloperAndPublisher(this.games);
         loadingGifToggle("off");
       })
       .catch(err => {
@@ -125,9 +147,29 @@ export default {
         });
       };
 
+      var addDeveloperAndPublisher = function(gameList) {
+        gameList.forEach(function(game) {
+          game["developer"] = 'N/A';
+          game["publisher"] = 'N/A';
+          var involvedCompanies = game.involved_companies;
+
+          if (involvedCompanies) {
+            involvedCompanies.forEach(function(involved_company) {
+              if (involved_company.publisher) {
+                game["publisher"] = involved_company.company.name;
+              }
+
+              if (involved_company.developer) {
+                game["developer"] = involved_company.company.name;
+              }
+            })
+          }
+        })
+      };
+
       loadingGifToggle("on");
       if (searchString !== '') {
-        var url = "https://api-v3.igdb.com/games?search=" + searchString + "&fields=name,id,genres.name,first_release_date,platforms.name,aggregated_rating,url,cover.image_id,summary&limit=25";
+        var url = "https://api-v3.igdb.com/games?search=" + searchString + "&fields=name,id,genres.name,first_release_date,platforms.name,aggregated_rating,url,cover.image_id,summary,involved_companies.developer,involved_companies.publisher,involved_companies.company.name&limit=25";
 
         var filterBoxes = Array.prototype.slice.call(document.querySelectorAll('input[type="checkbox"]'));
 
@@ -146,7 +188,8 @@ export default {
         .then(res => {
             
             this.games = res.data;
-            addNewDate(this.games); 
+            addNewDate(this.games);
+            addDeveloperAndPublisher(this.games);
             this.searchText = '';
             loadingGifToggle("off");
         })
@@ -154,13 +197,26 @@ export default {
         });
       }
       
+    },
+    displayTopButton: function() {
+      var topButton = document.getElementById("topButton");
+      if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        topButton.style.display = "block";
+      } else {
+        topButton.style.display = "none";
+      }
+    },
+    goToTop() {
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
     }
   },
   created() {
-
     this.populateResults();
-
-    
+    window.addEventListener('scroll', this.displayTopButton);
+  },
+  destroyed() {
+    window.addEventListener('scroll', this.displayTopButton);
   }
 }
 </script>
@@ -179,6 +235,10 @@ export default {
 
   article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section,input,textarea,label {
     display: block
+  }
+
+  html {
+    scroll-behavior: smooth;
   }
 
   body {
@@ -214,7 +274,7 @@ export default {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 10px;
-    grid-column-gap: 20px;
+    grid-column-gap: 10px;
     
   }
   @media (min-width: 1200px) {
@@ -279,5 +339,19 @@ export default {
     background: #f0f0f0;
     z-index: 1;
     opacity: .5;
+  }
+  #topButton {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100;
+    background: #000;
+    color: #fff;
+    cursor: pointer;
+    padding: 10px 20px;
+    font-weight: bold;
+    border: 0;
+    outline: 0;
   }
 </style>
