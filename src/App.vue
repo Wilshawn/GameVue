@@ -357,5 +357,6 @@ export default {
     font-size: .75em;
     position: relative;
     bottom: 2px;
+    cursor: pointer;
   }
 </style>
