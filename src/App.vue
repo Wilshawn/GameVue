@@ -242,7 +242,7 @@ export default {
   }
 
   body {
-    background: #F0F0F0;
+    background: #FFF;
     color: #484848;
     font-family: 'Raleway',sans-serif;
     font-size: 30px;
@@ -292,15 +292,13 @@ export default {
     background: #fff;
     text-align: center;
     margin: 0 auto;
-    color: #EE1B15;
+    color: #181818;
   }
   #SearchBar input {
-      background: transparent;
-      border: 0;
-      border-bottom: 10px solid #181818;
-      font: bold 100% "Lora", serif;
-      color: #EE1B15;
-      
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid #181818;
+    font: bold 100% "Lora", serif;
   }
   #SearchBar input:focus {
       outline-width: 0;
@@ -312,7 +310,7 @@ export default {
   }
   #SearchBar i.fa,
   ::placeholder {
-      color: #EE1B15;
+      color: #181818;
   }
   ::placeholder {
       opacity: .3;
@@ -346,12 +344,18 @@ export default {
     bottom: 20px;
     right: 20px;
     z-index: 100;
-    background: #000;
+    background: #181818;
     color: #fff;
     cursor: pointer;
     padding: 10px 20px;
     font-weight: bold;
     border: 0;
     outline: 0;
+  }
+  span.fa.fa-chevron-up,
+  span.fa.fa-chevron-down {
+    font-size: .75em;
+    position: relative;
+    bottom: 2px;
   }
 </style>

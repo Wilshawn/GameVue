@@ -1,9 +1,9 @@
 <template>
     <section>
-        <h2 class="filter-header">Filter <span @click="toggleFilter('all')" class="fa fa-sort-up"></span></h2>
+        <h2 class="filter-header">Filter <span @click="toggleFilter('all')" class="fa fa-chevron-up"></span></h2>
         <div id="SearchFilter">
             <div v-if="doesGenreExist">
-                <h3 class="genre-header">Genre <span @click="toggleFilter('genre')" class="fa fa-sort-up"></span></h3>
+                <h3 class="genre-header">Genre <span @click="toggleFilter('genre')" class="fa fa-chevron-up"></span></h3>
                 <div class="genre-filter-section">
                     <div v-bind:key="index" v-for="(category,index) in genreNameResults">
                         <label class="checkbox-label">
@@ -15,7 +15,7 @@
                 </div>
             </div>
             <div v-if="doesPlatformExist">
-                <h3 class="genre-header">Platform <span @click="toggleFilter('platform')" class="fa fa-sort-up"></span></h3>
+                <h3 class="genre-header">Platform <span @click="toggleFilter('platform')" class="fa fa-chevron-up"></span></h3>
                 <div class="platform-filter-section">
                     <div v-bind:key="index" v-for="(category,index) in platformNameResults">
                         <label class="checkbox-label">
@@ -27,7 +27,7 @@
                 </div>
             </div>
             <div v-if="doesCompanyExist">
-                <h3 class="genre-header">Company <span @click="toggleFilter('company')" class="fa fa-sort-up"></span></h3>
+                <h3 class="genre-header">Company <span @click="toggleFilter('company')" class="fa fa-chevron-up"></span></h3>
                 <div class="company-filter-section">
                     <div v-bind:key="index" v-for="(category,index) in companyNameResults">
                         <label class="checkbox-label">
@@ -104,11 +104,11 @@ export default {
                         });
 
                         if (!passFilter) {
-                            var gameBlock = document.getElementById(game.id);
+                            var gameBlock = document.getElementById(game.id).parentNode;
                             gameBlock.style.display = "none";
                         }
                     } else {
-                        var gameBlock = document.getElementById(game.id);
+                        var gameBlock = document.getElementById(game.id).parentNode;
                         gameBlock.style.display = "none";
                     }
                 });
@@ -159,7 +159,7 @@ export default {
 
             loadingGifToggle("on");
 
-            var gameResults = Array.prototype.slice.call(document.querySelectorAll('.SearchItems'));
+            var gameResults = Array.prototype.slice.call(document.querySelectorAll('.search-item-container'));
             var filterBoxes = Array.prototype.slice.call(document.querySelectorAll('input[type="checkbox"]'));
 
             gameResults.forEach(function(game) {
@@ -295,12 +295,12 @@ export default {
                 if (filter) {
                     if (filter.style.display === "none") {
                         filter.style.display = "block";
-                        filterIcon.classList.add('fa-sort-up');
-                        filterIcon.classList.remove('fa-sort-down');
+                        filterIcon.classList.add('fa-chevron-up');
+                        filterIcon.classList.remove('fa-chevron-down');
                     } else {
                         filter.style.display = "none";
-                        filterIcon.classList.add('fa-sort-down');
-                        filterIcon.classList.remove('fa-sort-up');
+                        filterIcon.classList.add('fa-chevron-down');
+                        filterIcon.classList.remove('fa-chevron-up');
                     }
                 }
             } else if (filterName == 'all') {
@@ -309,12 +309,12 @@ export default {
                 if (filter) {
                     if (filter.style.display === "none") {
                         filter.style.display = "block";
-                        filterIcon.classList.add('fa-sort-up');
-                        filterIcon.classList.remove('fa-sort-down');
+                        filterIcon.classList.add('fa-chevron-up');
+                        filterIcon.classList.remove('fa-chevron-down');
                     } else {
                         filter.style.display = "none";
-                        filterIcon.classList.add('fa-sort-down');
-                        filterIcon.classList.remove('fa-sort-up');
+                        filterIcon.classList.add('fa-chevron-down');
+                        filterIcon.classList.remove('fa-chevron-up');
                     }
                 }
             }
@@ -327,7 +327,7 @@ export default {
             this.populateFilter();
             this.populatePlatform();
             this.populateCompany();
-            if (screen.width < 1200) {
+            if (window.innerWidth < 1200) {
                 this.toggleFilter('all');
             }
         }
@@ -337,21 +337,23 @@ export default {
 
 <style scoped>
     #SearchFilter {
-        background: #484848;
         padding: 10px 25px;
-        color: #fff;
+        color: #181818;
+    }
+    #SearchFilter > div {
+        margin-bottom: 25px;
     }
     .filter-header {
-        color: #EE1B15;
+        color: #181818;
         font: bold 100% "Lora", serif;
         margin-top: 40px;
-        margin-bottom: 10px;
+        margin-bottom: 0;
     }
     .genre-header {
-        color: #fff;
+        color: #181818;
         font: bold 75% "Lora", serif;
-        margin-top: 20px;
-        margin-bottom: 10px;
+        margin-top: 10px;
+        margin-bottom: 15px;
     }
     .checkbox-label {
         display: block;
@@ -378,6 +380,7 @@ export default {
         width: 24px;
         background: #fff;
         transition: all 0.3s ease-out;
+        border: 1px solid #181818;
     }
     .checkbox-label .checkbox-custom:after {
         position: absolute;
@@ -386,7 +389,7 @@ export default {
         top: 12px;
         height: 0;
         width: 0;
-        border: solid #484848;
+        border: solid #181818;
         border-width: 0 3px 3px 0;
         -webkit-transform: rotate(0deg) scale(0);
         -ms-transform: rotate(0deg) scale(0);
@@ -400,18 +403,18 @@ export default {
         -ms-transform: rotate(0deg) scale(1);
         transform: rotate(0deg) scale(1);
         opacity: 1;
-        border: 2px solid #fff;
+        border: 2px solid #181818;
     }
     .checkbox-label input:checked ~ .checkbox-custom::after {
         -webkit-transform: rotate(45deg) scale(1);
         -ms-transform: rotate(45deg) scale(1);
         transform: rotate(45deg) scale(1);
         opacity: 1;
-        left: 8px;
-        top: 3px;
+        left: 7px;
+        top: 1px;
         width: 6px;
         height: 12px;
-        border: solid #484848;
+        border: solid #181818;
         border-width: 0 2px 2px 0;
         background: transparent;
     }
@@ -424,14 +427,15 @@ export default {
     .search-buttons a {
         padding: 10px 20px;
         color: #fff;
-        background: #EE1B15;
+        background: #181818;
         margin: 20px 0;
-        border: 0;
+        border: 1px solid #181818;
         font-size: 65%;
         font-weight: bold;
         cursor: pointer
     }
     .search-buttons a:hover {
-        background: #cc160f;
+        background: #fff;
+        color: #181818;
     }
 </style>

@@ -81,7 +81,7 @@ export default {
     }
     .search-results-header {
         font: bold 90% "Lora", serif;
-        color: #EE1B15;
+        color: #181818;
         margin-bottom: 10px;
         text-align: center;
     }
@@ -103,12 +103,13 @@ export default {
         color: #fff;
         background: #181818;
         margin: 20px 0;
-        border: 0;
+        border: 1px solid #181818;
         font-size: 55%;
         font-weight: bold;
     }
     .btn a:hover {
-        background: #EE1B15;
+        background: #fff;
+        color: #181818;
     }
     .game-rating {
         background: #efefef;
