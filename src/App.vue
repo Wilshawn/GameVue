@@ -307,6 +307,7 @@ export default {
       position: absolute;
       right: 0;
       font-size: 100%;
+      cursor: pointer;
   }
   #SearchBar i.fa,
   ::placeholder {
@@ -357,6 +358,5 @@ export default {
     font-size: .75em;
     position: relative;
     bottom: 2px;
-    cursor: pointer;
   }
 </style>

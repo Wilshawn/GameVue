@@ -1,9 +1,9 @@
 <template>
     <section>
-        <h2 class="filter-header">Filter <span @click="toggleFilter('all')" class="fa fa-chevron-up"></span></h2>
+        <h2 @click="toggleFilter('all')" class="filter-header">Filter <span class="fa fa-chevron-up"></span></h2>
         <div id="SearchFilter">
             <div v-if="doesGenreExist">
-                <h3 class="genre-header">Genre <span @click="toggleFilter('genre')" class="fa fa-chevron-up"></span></h3>
+                <h3 @click="toggleFilter('genre')" class="genre-header">Genre <span class="fa fa-chevron-up"></span></h3>
                 <div class="genre-filter-section">
                     <div v-bind:key="index" v-for="(category,index) in genreNameResults">
                         <label class="checkbox-label">
@@ -15,7 +15,7 @@
                 </div>
             </div>
             <div v-if="doesPlatformExist">
-                <h3 class="genre-header">Platform <span @click="toggleFilter('platform')" class="fa fa-chevron-up"></span></h3>
+                <h3 @click="toggleFilter('platform')" class="genre-header">Platform <span class="fa fa-chevron-up"></span></h3>
                 <div class="platform-filter-section">
                     <div v-bind:key="index" v-for="(category,index) in platformNameResults">
                         <label class="checkbox-label">
@@ -27,7 +27,7 @@
                 </div>
             </div>
             <div v-if="doesCompanyExist">
-                <h3 class="genre-header">Company <span @click="toggleFilter('company')" class="fa fa-chevron-up"></span></h3>
+                <h3 @click="toggleFilter('company')" class="genre-header">Company <span class="fa fa-chevron-up"></span></h3>
                 <div class="company-filter-section">
                     <div v-bind:key="index" v-for="(category,index) in companyNameResults">
                         <label class="checkbox-label">
@@ -342,6 +342,10 @@ export default {
     }
     #SearchFilter > div {
         margin-bottom: 25px;
+    }
+    #SearchFilter h3,
+    .filter-header {
+        cursor: pointer;
     }
     .filter-header {
         color: #181818;
