@@ -24,6 +24,8 @@
 <script>
 const inputValue = document.querySelector('#SearchBar input[type="text"]');
 const proxyurl = "https://cors-anywhere.herokuapp.com/";
+const client_id = "712pxo6xha8z3hxqbjem9i50416n8x";
+const client_secret = "ze7wwlheeixze4toghuc90pt4af42w";
 
 import axios from 'axios';
 import SearchFilter from './components/SearchFilter.vue'
@@ -37,14 +39,14 @@ export default {
   },
   data(){
     return {
-        searchText: '',
-        games: []
+      searchText: '',
+      games: [],
+      accessToken: '',
     }
   },
   methods: {
     // populate results on load
-    populateResults() {
-      
+    populateResults(accessToken) {
       // covert unix timestamp to human date
       var convertTS = function(timestamp_date) {
         var months_arr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -55,7 +57,6 @@ export default {
         var new_date = month + ' ' + day + ', ' + year;
         return new_date;
       }
-
 
       var addNewDate = function (gameList) {
         gameList.forEach(function(game) {
@@ -88,32 +89,45 @@ export default {
       var date = new Date();
       var greaterThanYear = date.getFullYear() - 1;
       var greaterThanYearTS = Date.parse('31 Dec ' + greaterThanYear + ' 16:59:59 GMT')/1000;
+      var accessTokenURL = "https://id.twitch.tv/oauth2/token?client_id=" + client_id + "&client_secret="+ client_secret + "&grant_type=client_credentials";
 
-      var url = "https://api-v3.igdb.com/games?fields=name,id,genres.name,first_release_date,platforms.name,aggregated_rating,url,cover.image_id,summary,involved_companies.developer,involved_companies.publisher,involved_companies.company.name&filter[first_release_date][gt]=" + greaterThanYearTS + "&order=popularity:desc&limit=25";
+      var url = "https://api.igdb.com/v4/games?fields=name,id,genres.name,first_release_date,platforms.name,aggregated_rating,url,cover.image_id,summary,involved_companies.developer,involved_companies.publisher,involved_companies.company.name&filter[first_release_date][gt]=" + greaterThanYearTS + "&order=popularity:desc&limit=25";
 
-      // grab api data from igdb
+      // get access token
       axios({
-          url: proxyurl + url,
-          method: 'GET',
+          url: proxyurl + accessTokenURL,
+          method: 'POST',
           headers: {
-              'user-key': 'af6ee0bc782a3591fa8930754a4ecd31',
-              'Access-Control-Allow-Origin': 'http://localhost:8080/'
+              'Access-Control-Allow-Origin': 'http://localhost:8080/',
           }
       })
       .then(res => {
-        this.games = res.data;
-        addNewDate(this.games);
-        addDeveloperAndPublisher(this.games);
-        loadingGifToggle("off");
+        this.accessToken = res.data.access_token;
+        axios({
+          url: proxyurl + url,
+          method: 'POST',
+          headers: {
+              'Client-ID': client_id,
+              'Authorization': 'Bearer ' + res.data.access_token,
+              'Access-Control-Allow-Origin': 'http://localhost:8080/'
+          }
+        })
+        .then(res => {
+          this.games = res.data;
+          console.log(this.games);
+          addNewDate(this.games);
+          addDeveloperAndPublisher(this.games);
+          loadingGifToggle("off");
+        })
+        .catch(err => {
+        });
       })
       .catch(err => {
       });
     },
-
+ 
     // get results based on search value
     getResults(searchString) {
-
-      
       var loadingGifToggle = function(toggle) {
         var loadingGif = document.getElementById('loading-gif');
         var overlay = document.getElementById('overlay');
@@ -169,7 +183,7 @@ export default {
 
       loadingGifToggle("on");
       if (searchString !== '') {
-        var url = "https://api-v3.igdb.com/games?search=" + searchString + "&fields=name,id,genres.name,first_release_date,platforms.name,aggregated_rating,url,cover.image_id,summary,involved_companies.developer,involved_companies.publisher,involved_companies.company.name&limit=25";
+        var url = "https://api.igdb.com/v4/games?search=" + searchString + "&fields=name,id,genres.name,first_release_date,platforms.name,aggregated_rating,url,cover.image_id,summary,involved_companies.developer,involved_companies.publisher,involved_companies.company.name&limit=25";
 
         var filterBoxes = Array.prototype.slice.call(document.querySelectorAll('input[type="checkbox"]'));
 
@@ -181,12 +195,12 @@ export default {
             url: proxyurl + url,
             method: 'GET',
             headers: {
-                'user-key': 'af6ee0bc782a3591fa8930754a4ecd31',
+              'Client-ID': client_id,
+              'Authorization': 'Bearer ' + this.accessToken,
                 'Access-Control-Allow-Origin': '*'
             }
         })
         .then(res => {
-            
             this.games = res.data;
             addNewDate(this.games);
             addDeveloperAndPublisher(this.games);

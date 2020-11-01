@@ -23,12 +23,13 @@ export default {
     },
     methods: {
         getResults(searchString) {
-            var url = "https://api-v3.igdb.com/games?search=" + searchString + "&fields=name,id,genres.name,first_release_date,platforms.name,aggregated_rating,url";
+            var url = "https://api.igdb.com/v4/games?search=" + searchString + "&fields=name,id,genres.name,first_release_date,platforms.name,aggregated_rating,url";
             axios({
                 url: proxyurl + url,
-                method: 'GET',
+                method: 'POST',
                 headers: {
-                    'user-key': 'af6ee0bc782a3591fa8930754a4ecd31',
+                    'Client-ID': '712pxo6xha8z3hxqbjem9i50416n8x',
+                    'Authorization': '8o9isyr6d7x78exbs8cf6wd0nx4rpw',
                     'Access-Control-Allow-Origin': 'http://localhost:8080'
                 }
             })
@@ -43,12 +44,13 @@ export default {
         }
     },
     created() {
-        var url = "https://api-v3.igdb.com/games?fields=name,id,genres.name,first_release_date,platforms.name,aggregated_rating,url&filter[first_release_date][gt]=1546275599&order=popularity:desc";
+        var url = "https://api.igdb.com/v4/games?fields=name,id,genres.name,first_release_date,platforms.name,aggregated_rating,url&filter[first_release_date][gt]=1546275599&order=popularity:desc";
         axios({
             url: proxyurl + url,
-            method: 'GET',
+            method: 'POST',
             headers: {
-                'user-key': 'af6ee0bc782a3591fa8930754a4ecd31',
+                'Client-ID': '712pxo6xha8z3hxqbjem9i50416n8x',
+                'Authorization': '8o9isyr6d7x78exbs8cf6wd0nx4rpw',
                 'Access-Control-Allow-Origin': 'http://localhost:8080'
             }
         })
