@@ -7,7 +7,7 @@
             <img src="../assets/images/boxart-not-found.jpg" />
         </div>
         <div>
-            <h3 class="search-results-header">{{ game.name }}</h3>            
+            <h3 class="search-results-header">{{ game.name }}</h3>
             <div v-if="game.summary"><p cl>{{ game.summary }}</p></div>
             <div class="results-details-layout">
                 <div v-if="game.human_date"><strong>Release Date:</strong><br>{{ game.human_date }}</div>
@@ -32,7 +32,7 @@
                 <div><strong>Developer:</strong><br>{{ game.developer }}</div>
 
                 <div><strong>Publisher:</strong><br>{{ game.publisher }}</div>
-                
+
             </div>
             <div class="btn">
                 <a :href="game.url" target="_blank">View Details</a>
@@ -56,7 +56,7 @@ export default {
     }
     .search-item-container p {
         font-size: 55%;
-    
+
         overflow: auto;
         max-height: 100px;
         text-align: justify;
@@ -86,12 +86,13 @@ export default {
         text-align: center;
     }
     .results-details-layout {
-        display: grid;
-        grid-template-columns: 33.3% 33.3% 33.3%;
+        display: flex;
         text-align: center;
         font-size: 55%;
+        flex-wrap: wrap;
     }
     .results-details-layout div {
+        flex-basis: 50%;
         margin: 10px 0;
     }
     .btn {
@@ -129,5 +130,11 @@ export default {
     .rating-low {
         background: #FF1D00;
         color: #fff;
+    }
+    @media (min-width: 768px) {
+        .results-details-layout div {
+            flex-basis: 33.3%;
+            flex-wrap: nowrap;
+        }
     }
 </style>
